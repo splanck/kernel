@@ -4,7 +4,7 @@
 
 .section .multiboot
     .long MAGIC
-    .long FLAG
+    .long FLAGS
     .long CHECKSUM
 
 .section .text
