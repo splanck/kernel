@@ -1,13 +1,7 @@
 // kernel.cpp - Main kernel source file.
+
 #include "types.h"
-
-typedef void (*constructor)();
-
-extern "C" constructor start_ctors;
-extern "C" constructor end_ctors;
-
-extern "C" void callConstructors();
-void kprint(char* s); 
+#include "mykernel.h"
 
 // Execution starting point for the kernel.
 extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber) {
