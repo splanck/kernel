@@ -1,5 +1,11 @@
 // kernel.cpp - Main kernel source file.
 
+typedef void (*constructor)();
+
+extern "C" constructor start_ctors;
+extern "C" constructor end_ctors;
+
+extern "C" void callConstructors();
 void kprint(char* s); 
 
 // Execution starting point for the kernel.
@@ -9,11 +15,17 @@ extern "C" void kernelMain(void* multiboot_structure, unsigned int magicnumber) 
     while(1);
 }
 
+// Call all constructors for initialization.
+extern "C" void callConstructors() {
+    for (constructor* x = &start_ctors; x != &end_ctors; x++)
+        (*x)();
+}
+
 // Basic text print function.
 void kprint(char* s) {
     unsigned short* VideoMemory = (unsigned short*)0xb8000;
 
-    for(int i = 0; s[i] != '\0'; i++) {
-        VideoMemory[i] = (VideoMemory[i] & 0xFF00) | s[i];
+    for(int x = 0; s[x] != '\0'; x++) {
+        VideoMemory[x] = (VideoMemory[x] & 0xFF00) | s[x];
     }
 }
