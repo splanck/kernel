@@ -15,3 +15,25 @@ mykernel.bin: linker.ld $(objects)
 
 install: mykernel.bin
 	sudo cp $< /boot/mykernel.bin
+
+mykernel.iso: mykernel.bin
+	mkdir -p ./iso/boot/grub
+	mkdir ./out
+	cp $< ./iso/boot/
+	echo 'set timeout=0' >> ./iso/boot/grub/grub.cfg
+	echo 'set default=0' >> ./iso/boot/grub/grub.cfg	
+	echo 'menuentry "mykernel" {' >> ./iso/boot/grub/grub.cfg
+	echo '	multiboot /boot/mykernel.bin' >> ./iso/boot/grub/grub.cfg
+	echo '	boot' >> ./iso/boot/grub/grub.cfg
+	echo '}' >> ./iso/boot/grub/grub.cfg
+	grub-mkrescue --output=./out/$@ iso
+
+run: mykernel.iso
+	(killall VirtualBox && sleep 1) || true
+	vboxmanage startvm mykernel &
+
+clean:
+	rm *.o
+	rm *.bin
+	rm -rf iso
+	rm -rf out	
