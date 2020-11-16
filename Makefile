@@ -29,6 +29,7 @@ mykernel.iso: mykernel.bin
 	grub-mkrescue --output=./out/$@ iso
 
 run: mykernel.iso
+	(vboxmanage controlvm mykernel poweroff && sleep 1) || true
 	(killall VirtualBox && sleep 1) || true
 	vboxmanage startvm mykernel &
 
