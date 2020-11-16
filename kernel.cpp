@@ -24,7 +24,7 @@ extern "C" void callConstructors() {
 
 // Basic text print function.
 void kprint(char* s) {
-    unsigned short* VideoMemory = (unsigned short*)0xb8000;
+    uint16_t* VideoMemory = (uint16_t*)0xb8000;
 
     for(int x = 0; s[x] != '\0'; x++) {
         VideoMemory[x] = (VideoMemory[x] & 0xFF00) | s[x];
