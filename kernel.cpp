@@ -6,6 +6,8 @@
 // Execution starting point for the kernel.
 extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber) {
     kprint("This is a test kernel! OH OK!");
+    kprint("Another dumb statement!");
+
 
     while(1);
 }
