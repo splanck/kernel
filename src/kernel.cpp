@@ -1,7 +1,7 @@
 // kernel.cpp - Main kernel source file.
 #include "types.h"
 #include "gdt.h"
-#include "mykernel.h"
+#include "kernel.h"
 
 // Execution starting point for the kernel.
 extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)

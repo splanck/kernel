@@ -1,7 +1,7 @@
 // mykernel.h - Header file for the mykernel.cpp main kernel source file.
 
-#ifndef __MYKERNEL_H
-#define __MYKERNEL_H
+#ifndef __KERNEL_H
+#define __KERNEL_H
 
 typedef void (*constructor)();
 
