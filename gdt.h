@@ -6,6 +6,8 @@
 class GlobalDescriptorTable 
 {
     public:
+        // Sub class that provides the structure for an entry into the global
+        // descriptor table.
         class SegmentDescriptor 
         {
             private:
@@ -21,16 +23,17 @@ class GlobalDescriptorTable
                 uint32_t Limit();
         } __attribute__((packed));
 
-        SegmentDescriptor nullSegmentDescriptor;
-        SegmentDescriptor unusedSegmentDescriptor;
-        SegmentDescriptor codeSegmentDescriptor;
-        SegmentDescriptor dataSegmentDescriptor;
+        SegmentDescriptor nullSegmentSelector;
+        SegmentDescriptor unusedSegmentSelector;
+        SegmentDescriptor codeSegmentSelector;
+        SegmentDescriptor dataSegmentSelector;
 
+    public:
         GlobalDescriptorTable();
         ~GlobalDescriptorTable();
 
-        uint16_t codeSegmentSelector();
-        uint16_t dataSegmentSelector();
-}
+        uint16_t CodeSegmentSelector();
+        uint16_t DataSegmentSelector();
+};
 
 #endif

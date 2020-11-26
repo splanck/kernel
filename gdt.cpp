@@ -1,10 +1,12 @@
 #include "gdt.h"
 
+// Constructor initializes four memory segments. These include null and unused segments
+// as well as a 64MB code and data segment.
 GlobalDescriptorTable::GlobalDescriptorTable()
-: nullSegmentDescriptor(0, 0, 0),
-unusedSegmentDescriptor(0, 0, 0),
-codeSegmentDescriptor(0, 64*1024*1024, 0x9A),
-dataSegmentDescriptor(0, 64*1024*1024, 0x92)
+: nullSegmentSelector(0, 0, 0),
+unusedSegmentSelector(0, 0, 0),
+codeSegmentSelector(0, 64*1024*1024, 0x9A),
+dataSegmentSelector(0, 64*1024*1024, 0x92)
 {
     uint32_t i[2];
     i[0] = (uint32_t)this;
@@ -18,15 +20,15 @@ GlobalDescriptorTable::~GlobalDescriptorTable()
 
 }
 
-uint16_t GlobalDescriptorTable::dataSegmentSelector() {
+uint16_t GlobalDescriptorTable::DataSegmentSelector() {
     return (uint8_t*)&dataSegmentSelector - (uint8_t*)this;
 }
 
-uint16_t GlobalDescriptorTable::codeSegmentSelector() {
+uint16_t GlobalDescriptorTable::CodeSegmentSelector() {
     return (uint8_t*)&codeSegmentSelector - (uint8_t*)this;
 }
 
-GlobalDescriptorTable::SegmentSelector::SegmentSelector(uint32_t base, uint32_t limit, uint8_t flags) 
+GlobalDescriptorTable::SegmentDescriptor::SegmentDescriptor(uint32_t base, uint32_t limit, uint8_t flags) 
 {
     uint8_t* target = (uint8_t*)this;
 
@@ -60,7 +62,7 @@ GlobalDescriptorTable::SegmentSelector::SegmentSelector(uint32_t base, uint32_t 
     target[5] = flags;
 }
 
-uint32_t GlobalDescriptorTable::SegmentSelector::Base()
+uint32_t GlobalDescriptorTable::SegmentDescriptor::Base()
 {
     uint8_t* target = (uint8_t*)this;
 
@@ -72,7 +74,18 @@ uint32_t GlobalDescriptorTable::SegmentSelector::Base()
     return result;
 }
 
-uint32_t GlobalDescriptorTable::SegmentSelector::Limit()
+uint32_t GlobalDescriptorTable::SegmentDescriptor::Limit()
 {
+    uint8_t* target = (uint8_t*)this;
 
+    uint32_t result = target[6] & 0xFF;
+    result = (result << 8) + target[1];
+    result = (result << 8) + target[0];
+
+    if((target[6] & 0xC0) == 0xC0)
+    {
+        result = (result << 12) | 0xFFF;
+    }
+
+    return result;
 }
