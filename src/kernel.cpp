@@ -33,25 +33,27 @@ void kprint(char* s)
 
     for(int i = 0; s[i] != '\0'; i++) 
     {
-        if(s[i] == '\n')
+        if(s[i] == '\n') // Process linefeed character
         {
             y++;
             x = 0;
         }
-        else
-        {
+        else // Print character at current position.
+        { 
             c = 80 * y + x;
             vmem[c] = (vmem[c] & 0xFF00) | s[i];
 
             x++;
         }
 
+        // Handle end of line
         if(x >= 80) 
         {
             y++;
             x = 0;
         }
-
+        
+        // Handle last row
         if(y >= 25) 
         {
             for(y = 0; y < 25; y++)

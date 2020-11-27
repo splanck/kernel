@@ -1,3 +1,5 @@
+// port.cpp - Contains port classes for communicating with hardware
+
 #include "port.h"
 
 Port::Port(uint16_t portnumber)
