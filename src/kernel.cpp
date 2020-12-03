@@ -1,15 +1,20 @@
 // kernel.cpp - Main kernel source file.
 #include "types.h"
 #include "gdt.h"
+#include "interrupts.h"
 #include "kernel.h"
 
 // Execution starting point for the kernel.
 extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
 {
-    kprint("This is a test kernel! OH OK!\n");
-    kprint("This is another test!");
+    kprint("Booting kernel...\n");
 
+    kprint("Creating global descriptor table...\n");
     GlobalDescriptorTable gdt;
+
+    kprint("Setting up CPU interrupts...\n");
+    InterruptManager interrupts(&gdt);
+    interrupts.Activate();
 
     while(1);
 }
