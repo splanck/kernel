@@ -14,6 +14,8 @@ extern "C" void kernelMain(void* multiboot_structure, uint32_t magicnumber)
 
     kprint("Setting up CPU interrupts...\n");
     InterruptManager interrupts(&gdt);
+
+    kprint("Activating interrupts...\n");
     interrupts.Activate();
 
     while(1);

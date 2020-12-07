@@ -3,23 +3,26 @@
 .section .text
 
 .extern _ZN16InterruptManager15handleInterruptEhj
+.global _ZN16InterruptManager22IgnoreInterruptRequestEv 
 
 # Macro function to handle exceptions.
 .macro HandleException num
-.global _ZN16InterruptManager26handleInterruptRequest\num\()Ev
-    mov $\num, (interruptnumber)
+.global _ZN16InterruptManager16HandleException\num\()Ev
+_ZN16InterruptManager16HandleException\num\()Ev:
+    movb $\num, (interruptnumber)
     jmp int_bottom
 .endm
 
 # Macro function to pass interrupt number to cpp event handler.
 .macro HandleInterruptRequest num
-.global _ZN16InterruptManager26handleInterruptRequest\num\()Ev
-    mov $\num + IRQ_BASE, (interruptnumber)
+.global _ZN16InterruptManager26HandleInterruptRequest\num\()Ev
+_ZN16InterruptManager26HandleInterruptRequest\num\()Ev:
+    movb $\num + IRQ_BASE, (interruptnumber)
     jmp int_bottom
 .endm
 
-HandleInterruptRequest 0x00 # Interrupt request handler for timer interrupt
-HandleInterruptRequest 0x01 # Interrupt request handler for keyboard input
+HandleInterruptRequest 0x00
+HandleInterruptRequest 0x01
 
 int_bottom:
     # Store away current stack
@@ -34,7 +37,7 @@ int_bottom:
     push (interruptnumber)
     call _ZN16InterruptManager15handleInterruptEhj
 
-    mov %eax, %esp
+    movl %eax, %esp
 
     # Pop previous context from the stack to restore values for previous process.
     popl %gs
@@ -42,6 +45,8 @@ int_bottom:
     popl %fs
     popl %ds
     popa
+
+_ZN16InterruptManager22IgnoreInterruptRequestEv:
 
     iret
 

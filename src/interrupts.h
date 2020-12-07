@@ -11,7 +11,7 @@ class InterruptManager
         struct GateDescriptor
         {
             uint16_t handlerAddressLowBits;
-            uint16_t gdt_codeSegnentSelector;
+            uint16_t gdt_codeSegmentSelector;
             uint8_t reserved;
             uint8_t access;
             uint16_t handlerAddressHighBits;
@@ -32,6 +32,11 @@ class InterruptManager
             uint8_t DescriptorPrivilageLevel,
             uint8_t DescriptorType
         );
+
+        Port8BitSlow picMasterCommand;
+        Port8BitSlow picMasterData;
+        Port8BitSlow picSlaveCommand;
+        Port8BitSlow picSlaveData;
 
     public:
         InterruptManager(GlobalDescriptorTable* gdt);
