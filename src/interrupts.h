@@ -29,7 +29,7 @@ class InterruptManager
             uint8_t interruptNumber,
             uint16_t codeSegnentSelectorOffset,
             void (*handler)(),
-            uint8_t DescriptorPrivilageLevel,
+            uint8_t DescriptorPrivilegeLevel,
             uint8_t DescriptorType
         );
 

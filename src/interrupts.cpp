@@ -8,16 +8,16 @@ void InterruptManager::SetInterruptDescriptorTableEntry(
     uint8_t interruptNumber,
     uint16_t codeSegnentSelectorOffset,
     void (*handler)(),
-    uint8_t DescriptorPrivilageLevel,
+    uint8_t DescriptorPrivilegeLevel,
     uint8_t DescriptorType)
 {
     const uint8_t IDT_DESC_PRESENT = 0x80;
 
-    InterruptDescriptorTable[interruptNumber].handlerAddressLowBits = ((uint32_t)handler) & 0xFFFF;
-    InterruptDescriptorTable[interruptNumber].handlerAddressHighBits = ((uint32_t)handler >> 16) & 0xFFFF;
+    InterruptDescriptorTable[interruptNumber].handlerAddressLowBits = ((uint32_t) handler) & 0xFFFF;
+    InterruptDescriptorTable[interruptNumber].handlerAddressHighBits = (((uint32_t) handler) >> 16) & 0xFFFF;
     InterruptDescriptorTable[interruptNumber].gdt_codeSegmentSelector = codeSegnentSelectorOffset;
     InterruptDescriptorTable[interruptNumber].access = IDT_DESC_PRESENT | DescriptorType | 
-        ((DescriptorPrivilageLevel&3) << 5);
+        ((DescriptorPrivilegeLevel & 3) << 5);
     InterruptDescriptorTable[interruptNumber].reserved = 0;
 }
 
